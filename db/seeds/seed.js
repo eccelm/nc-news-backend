@@ -20,7 +20,7 @@ exports.seed = function (knex) {
       return knex.insert(userData).into("users").returning("*");
     })
     .then(() => {
-      const formatArticle = formatDate(articleData);
-      return knex.insert(formatArticle).into("articles").returning("*");
+      const formattedArticleData = formatDate(articleData);
+      return knex.insert(formattedArticleData).into("articles").returning("*");
     });
 };

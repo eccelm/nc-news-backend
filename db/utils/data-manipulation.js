@@ -8,4 +8,13 @@ const formatDate = (data) => {
   });
 };
 
-module.exports = { formatDate };
+const createReferenceObj = (rows, nameKey, idKey) => {
+  const ref = {};
+
+  rows.forEach((row) => {
+    ref[row[nameKey]] = row[idKey];
+  });
+  return ref;
+};
+
+module.exports = { formatDate, createReferenceObj };
