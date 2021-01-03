@@ -5,7 +5,11 @@ const {
   userData,
 } = require("../data/index.js");
 
-const { formatDate } = require("../utils/data-manipulation");
+const {
+  formatDate,
+  formatComments,
+  createReferenceObj,
+} = require("../utils/data-manipulation");
 
 exports.seed = function (knex) {
   return knex.migrate
@@ -22,5 +26,11 @@ exports.seed = function (knex) {
     .then(() => {
       const formattedArticleData = formatDate(articleData);
       return knex.insert(formattedArticleData).into("articles").returning("*");
+    })
+    .then((articles) => {
+      const idRef = createReferenceObj(articles, "title", "article_id");
+      const commentsWithTimeStamp = formatDate(commentData);
+      const formattedComments = formatComments(commentsWithTimeStamp, idRef);
+      return knex.insert(formattedComments).into("comments").returning("*");
     });
 };
