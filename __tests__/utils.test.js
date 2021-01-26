@@ -152,7 +152,7 @@ describe("createReferenceObj", () => {
   });
 });
 
-describe.only("formatComments", () => {
+describe("formatComments", () => {
   test("should return a new array", () => {
     const singleComment = [
       {
