@@ -3,7 +3,7 @@ const app = require("../app");
 const request = require("supertest");
 const connection = require("../db/connection");
 
-describe("/api", () => {
+describe("PATH: /api", () => {
   beforeEach(() => {
     return connection.seed.run();
   });
@@ -11,8 +11,8 @@ describe("/api", () => {
     return connection.destroy();
   });
 
-  describe("api/topics", () => {
-    test("GET 200: responds with all topics, which have the correct keys", () => {
+  describe("PATH: api/topics", () => {
+    test("GET 200: responds with an array of all topics, each topic has ", () => {
       return request(app)
         .get("/api/topics")
         .expect(200)
@@ -23,29 +23,40 @@ describe("/api", () => {
           expect(topics[0]).toHaveProperty("description");
         });
     });
+    // topics closing
   });
+  describe("PATH: api/users", () => {
+    test("GET 200: responds with an array of all users, and each user object has the correct keys", () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then((res) => {
+          const { users } = res.body;
+          expect(users).toEqual(expect.any(Array));
+          expect(users[0]).toHaveProperty("name");
+          expect(users[0]).toHaveProperty("username");
+          expect(users[0]).toHaveProperty("avatar_url");
+        });
+    });
+
+    describe("PATH /:username", () => {
+      test("GET 200: responds with an object of the user with the correct keys", () => {
+        return request(app)
+          .get("/api/users/lurker")
+          .expect(200)
+          .then((res) => {
+            const { user } = res.body;
+            expect(user).toEqual(expect.any(Object));
+            expect(Object.keys(user)).toEqual(
+              expect.arrayContaining(["username", "avatar_url", "name"])
+            );
+            expect(user.username).toBe("lurker");
+          });
+      });
+      // users/:username closing
+    });
+    // users closing
+  });
+
+  // api closing
 });
-
-/*
-GET /api/users/:username
-
-DELETE /api/articles/:article_id
-PATCH /api/articles/:article_id
-GET /api/articles/:article_id
-
-POST /api/articles/:article_id/comments
-GET /api/articles/:article_id/comments
-
-GET /api/articles
-POST /api/articles
-
-PATCH /api/comments/:comment_id
-DELETE /api/comments/:comment_id
-
-GET /api
-
-DELETE /api/articles/:article_id
-POST /api/topics
-POST /api/users
-GET /api/users
-*/

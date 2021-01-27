@@ -1,4 +1,4 @@
-const { fetchAllTopics } = require("../models/topics");
+const { fetchAllTopics, addTopic } = require("../models/topics");
 
 const getAllTopics = (req, res, next) => {
   fetchAllTopics()
@@ -8,7 +8,11 @@ const getAllTopics = (req, res, next) => {
     .catch(next);
 };
 
-module.exports = { getAllTopics };
+const postNewTopic = (req, res, next) => {
+  // model func here req.params destructure
+  addTopic();
+};
+module.exports = { getAllTopics, postNewTopic };
 
 /*
 Naming functions CRUD (Create, Read, Update, Delete)
