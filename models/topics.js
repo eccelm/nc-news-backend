@@ -4,13 +4,17 @@ const fetchAllTopics = () => {
   return connection
     .select("*")
     .from("topics")
-    .returning("*")
     .then((topics) => {
       return topics;
     });
 };
 
-module.exports = { fetchAllTopics };
+const addTopic = (newTopic) => {
+  //console.log(newTopic, "testings a new topic");
+  return connection("topics").insert(newTopic).returning("*");
+};
+
+module.exports = { fetchAllTopics, addTopic };
 
 /*
 Naming functions CRUD (Create, Read, Update, Delete)

@@ -23,8 +23,21 @@ describe("PATH: /api", () => {
           expect(topics[0]).toHaveProperty("description");
         });
     });
+    test.only("POST 201: successfully adds a new topic, returning the post details and confirmation message", () => {
+      return request(app)
+        .post("/api/topics")
+        .send({ slug: "testing", description: "I am a test" })
+        .expect(201)
+        .then(({ body }) => {
+          expect(body).toEqual({
+            slug: "testing",
+            description: "I am a test",
+          });
+        });
+    });
     // topics closing
   });
+
   describe("PATH: api/users", () => {
     test("GET 200: responds with an array of all users, and each user object has the correct keys", () => {
       return request(app)

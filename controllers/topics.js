@@ -9,8 +9,12 @@ const getAllTopics = (req, res, next) => {
 };
 
 const postNewTopic = (req, res, next) => {
-  // model func here req.params destructure
-  addTopic();
+  const { slug, description } = req.body;
+  addTopic({ slug, description })
+    .then((newTopic) => {
+      res.status(201).send(newTopic[0]);
+    })
+    .catch(next);
 };
 module.exports = { getAllTopics, postNewTopic };
 
