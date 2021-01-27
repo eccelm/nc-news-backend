@@ -1,5 +1,7 @@
 ## Possible further Routes:
 
+CHANGE morning testing so that there is a relevant key for the object returned e.g. newUser : {....}
+
 ##User Profile:
 Create new User
 Change your avatar - Patch
