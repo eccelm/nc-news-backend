@@ -1,7 +1,7 @@
 ## Possible further Routes:
 
 CHANGE morning testing so that there is a relevant key for the object returned e.g. newUser : {....}
-
+--> returning(\*) see if can be refactored to not have then block
 ##User Profile:
 Create new User
 Change your avatar - Patch

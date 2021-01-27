@@ -2,9 +2,27 @@ const connection = require('../db/connection');
 //Article
 const fetchAllArticles = () => {};
 
-const fetchArticleById = () => {};
+const fetchArticleById = (article_id) => {
+	return connection
+		.select('articles.*')
+		.count('comments.comment_id AS comment_count')
+		.from('articles')
+		.leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
+		.groupBy('articles.article_id')
+		.where('articles.article_id', '=', article_id)
+		.then((article) => {
+			return article[0];
+		});
+};
 
-const updateArticleVotes = () => {};
+const updateArticle = (reqBody, article_id) => {
+	const { inc_votes } = reqBody;
+	return connection
+		.increment('votes', inc_votes)
+		.into('articles')
+		.where('article_id', '=', article_id)
+		.returning('*');
+};
 
 const removeArticle = () => {};
 
@@ -20,6 +38,6 @@ module.exports = {
 	fetchAllArticles,
 	fetchArticleById,
 	addNewArticle,
-	updateArticleVotes,
+	updateArticle,
 	addCommentToArticle,
 };

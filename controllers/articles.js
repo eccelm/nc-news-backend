@@ -2,7 +2,7 @@ const {
 	removeArticle,
 	fetchAllArticles,
 	fetchArticleById,
-	updateArticleVotes,
+	updateArticle,
 	fetchArticleComments,
 	addCommentToArticle,
 	addNewArticle,
@@ -14,9 +14,24 @@ const getAllArticles = (req, res, next) => {};
 
 const postNewArticle = (req, res, next) => {};
 
-const getArticleById = (req, res, next) => {};
+const getArticleById = (req, res, next) => {
+	const { article_id } = req.params;
 
-const patchVotes = (req, res, next) => {};
+	fetchArticleById(article_id)
+		.then((article) => {
+			res.status(200).send({ article });
+		})
+		.catch(next);
+};
+
+const patchArticle = (req, res, next) => {
+	const { article_id } = req.params;
+	updateArticle(req.body, article_id)
+		.then((article) => {
+			res.status(202).send({ article: article[0] });
+		})
+		.catch(next);
+};
 
 const getArticleComments = (req, res, next) => {};
 
@@ -26,7 +41,7 @@ module.exports = {
 	deleteArticle,
 	getAllArticles,
 	getArticleById,
-	patchVotes,
+	patchArticle,
 	postNewArticle,
 	postCommentToArticle,
 	getArticleComments,

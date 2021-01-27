@@ -51,7 +51,7 @@ describe('PATH: /api', () => {
 					expect(users[0]).toHaveProperty('avatar_url');
 				});
 		});
-		test.only('POST 201: should add a new user, and return the user details', () => {
+		test('POST 201: should add a new user, and return the user details', () => {
 			return request(app)
 				.post('/api/users')
 				.send({
@@ -61,7 +61,6 @@ describe('PATH: /api', () => {
 				})
 				.expect(201)
 				.then(({ body }) => {
-					console.log(body);
 					expect(body).toEqual({
 						name: 'Cuba E',
 						username: 'CubaTheStaffy',
@@ -87,6 +86,62 @@ describe('PATH: /api', () => {
 		});
 		// users closing
 	});
+	describe('PATH: api/articles', () => {
+		// all articles
+		describe('PATH: /:article_id', () => {
+			test('GET 200: responds with an object of the reqested article with the correct keys', () => {
+				return request(app)
+					.get('/api/articles/1')
+					.expect(200)
+					.then((res) => {
+						const { article } = res.body;
+						expect(article).toEqual(expect.any(Object));
+						expect(Object.keys(article)).toEqual(
+							expect.arrayContaining([
+								'author',
+								'title',
+								'article_id',
+								'body',
+								'topic',
+								'created_at',
+								'votes',
+								'comment_count',
+							])
+						);
+					});
+			});
 
+			test('PATCH returns 202 and increases the vote count by the passed amount', () => {
+				const increaseBy = { inc_votes: 5 };
+				return request(app)
+					.patch('/api/articles/1')
+					.send(increaseBy)
+					.expect(202)
+					.then((res) => {
+						const {
+							article: { votes },
+						} = res.body;
+
+						expect(votes).toBe(105);
+					});
+			});
+			test('PATCH returns 202 and decreases the vote count by the passed amount', () => {
+				const increaseBy = { inc_votes: -5 };
+				return request(app)
+					.patch('/api/articles/1')
+					.send(increaseBy)
+					.expect(202)
+					.then((res) => {
+						const {
+							article: { votes },
+						} = res.body;
+
+						expect(votes).toBe(95);
+					});
+			});
+
+			describe('PATH: /:article_id/comments', () => {});
+		});
+	});
 	// api closing
 });
