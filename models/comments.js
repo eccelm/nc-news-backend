@@ -7,7 +7,10 @@ const updateComment = (inc_votes, comment_id) => {
 		.where('comment_id', comment_id)
 		.returning('*');
 };
-const removeComment = () => {};
+
+const removeComment = (comment_id) => {
+	return connection.del().from('comments').where({ comment_id });
+};
 
 module.exports = {
 	updateComment,

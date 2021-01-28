@@ -11,6 +11,11 @@ const patchComment = (req, res, next) => {
 		.catch(next);
 };
 
-const deleteComment = (req, res, next) => {};
+const deleteComment = (req, res, next) => {
+	const { comment_id } = req.params;
+	removeComment(comment_id).then(() => {
+		res.sendStatus(204);
+	});
+};
 
 module.exports = { patchComment, deleteComment };

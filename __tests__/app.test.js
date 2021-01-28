@@ -195,39 +195,52 @@ describe('PATH: /api', () => {
 		});
 		//articles closing
 	});
-	describe('PATH: api/comments/:commentid', () => {
-		test('PATCH 202: increases the vote count by the passed amount, and returns the updated comment', () => {
-			const increaseBy = { inc_votes: 5 };
-			return request(app)
-				.patch('/api/comments/1')
-				.send(increaseBy)
-				.expect(202)
-				.then(
-					({
-						body: {
-							comment: { votes },
-						},
-					}) => {
-						expect(votes).toBe(21);
-					}
-				);
+	describe('PATH: api/comments', () => {
+		describe('PATH: api/comments/:commentid', () => {
+			test('PATCH 202: increases the vote count by the passed amount, and returns the updated comment', () => {
+				const increaseBy = { inc_votes: 5 };
+				return request(app)
+					.patch('/api/comments/1')
+					.send(increaseBy)
+					.expect(202)
+					.then(
+						({
+							body: {
+								comment: { votes },
+							},
+						}) => {
+							expect(votes).toBe(21);
+						}
+					);
+			});
+			test('PATCH 202: decreases the vote count by the passed amount, and returns the updated comment', () => {
+				const decreaseBy = { inc_votes: -5 };
+				return request(app)
+					.patch('/api/comments/1')
+					.send(decreaseBy)
+					.expect(202)
+					.then(
+						({
+							body: {
+								comment: { votes },
+							},
+						}) => {
+							expect(votes).toBe(11);
+						}
+					);
+			});
+
+			test('DELETE 204: deletes the comment, only returning 204 status', () => {
+				return request(app)
+					.delete('/api/comments/1')
+					.expect(204)
+					.then(({ body }) => {
+						console.log(body);
+						expect(Object.entries(body).length).toBe(0);
+					});
+			});
 		});
-		test('PATCH 202: decreases the vote count by the passed amount, and returns the updated comment', () => {
-			const decreaseBy = { inc_votes: -5 };
-			return request(app)
-				.patch('/api/comments/1')
-				.send(decreaseBy)
-				.expect(202)
-				.then(
-					({
-						body: {
-							comment: { votes },
-						},
-					}) => {
-						expect(votes).toBe(11);
-					}
-				);
-		});
+		//comments closing
 	});
 	// api closing
 });
