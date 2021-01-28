@@ -114,6 +114,7 @@ describe('PATH: /api', () => {
 					);
 				});
 		});
+
 		describe('PATH: /:article_id', () => {
 			// individual articles
 			test('GET 200: responds with an object of the reqested article with the correct keys', () => {
@@ -166,6 +167,40 @@ describe('PATH: /api', () => {
 						expect(votes).toBe(95);
 					});
 			});
+
+			test('DELETE 204: deletes the article, only returning 204 status', () => {
+				return request(app)
+					.delete('/api/articles/1')
+					.expect(204)
+					.then(({ body }) => {
+						expect(Object.entries(body).length).toBe(0);
+					});
+			});
+			test('DELETE 204: deletes the article specified in the path', () => {
+				return request(app)
+					.delete('/api/articles/1')
+					.expect(204)
+					.then(() => {
+						return connection
+							.from('articles')
+							.where('article_id', '=', '1')
+							.first();
+					})
+					.then((article) => {
+						expect(article).toBeUndefined();
+					});
+			});
+			test('DELETE 204: deletes all comments on the deleted article', () => {
+				return request(app)
+					.delete('/api/articles/1')
+					.expect(204)
+					.then(() => {
+						return connection.from('comments').where('article_id', '=', '1');
+					})
+					.then((commentArray) => {
+						expect(commentArray.length).toBe(0);
+					});
+			});
 		});
 
 		describe('PATH: /:article_id/comments', () => {
@@ -196,7 +231,7 @@ describe('PATH: /api', () => {
 		//articles closing
 	});
 	describe('PATH: api/comments', () => {
-		describe('PATH: api/comments/:commentid', () => {
+		describe('PATH: /comments/:commentid', () => {
 			test('PATCH 202: increases the vote count by the passed amount, and returns the updated comment', () => {
 				const increaseBy = { inc_votes: 5 };
 				return request(app)
@@ -235,7 +270,6 @@ describe('PATH: /api', () => {
 					.delete('/api/comments/1')
 					.expect(204)
 					.then(({ body }) => {
-						console.log(body);
 						expect(Object.entries(body).length).toBe(0);
 					});
 			});

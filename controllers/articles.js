@@ -8,7 +8,15 @@ const {
 	addNewArticle,
 } = require('../models/articles');
 
-const deleteArticle = (req, res, next) => {};
+const deleteArticle = (req, res, next) => {
+	let { article_id } = req.params;
+
+	removeArticle(article_id)
+		.then(() => {
+			res.sendStatus(204);
+		})
+		.catch(next);
+};
 
 const getAllArticles = (req, res, next) => {};
 

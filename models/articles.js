@@ -24,7 +24,9 @@ const updateArticle = (reqBody, article_id) => {
 		.returning('*');
 };
 
-const removeArticle = () => {};
+const removeArticle = (article_id) => {
+	return connection('articles').del().where({ article_id });
+};
 
 const addNewArticle = (newArticle) => {
 	return connection.insert(newArticle).into('articles').returning('*');
