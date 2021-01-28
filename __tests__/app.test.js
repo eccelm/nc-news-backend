@@ -239,6 +239,20 @@ describe('PATH: /api', () => {
 						expect(Object.entries(body).length).toBe(0);
 					});
 			});
+			test('DELETE 204: deletes the comment specified in the path', () => {
+				return request(app)
+					.delete('/api/comments/1')
+					.expect(204)
+					.then(() => {
+						return connection
+							.from('comments')
+							.where('comment_id', '=', '1')
+							.first();
+					})
+					.then((comment) => {
+						expect(comment).toBeUndefined();
+					});
+			});
 		});
 		//comments closing
 	});
