@@ -2,7 +2,7 @@
 
 Potential Refactors:
 Array destructuring?
-
+Can /Should article/comments move into comments model/controller?
 ##User Profile:
 Create new User
 Change your avatar - Patch
