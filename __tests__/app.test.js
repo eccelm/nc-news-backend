@@ -28,8 +28,8 @@ describe('PATH: /api', () => {
 				.post('/api/topics')
 				.send({ slug: 'testing', description: 'I am a test' })
 				.expect(201)
-				.then(({ body }) => {
-					expect(body).toEqual({
+				.then(({ body: { topic } }) => {
+					expect(topic).toEqual({
 						slug: 'testing',
 						description: 'I am a test',
 					});
@@ -60,8 +60,8 @@ describe('PATH: /api', () => {
 					avatar_url: 'https://www.instagram.com/p/CKbpvsSABfq/',
 				})
 				.expect(201)
-				.then(({ body }) => {
-					expect(body).toEqual({
+				.then(({ body: { user } }) => {
+					expect(user).toMatchObject({
 						name: 'Cuba E',
 						username: 'CubaTheStaffy',
 						avatar_url: 'https://www.instagram.com/p/CKbpvsSABfq/',
@@ -88,7 +88,34 @@ describe('PATH: /api', () => {
 	});
 	describe('PATH: api/articles', () => {
 		// all articles
+		test('POST 201: responds with the newly posted article', () => {
+			return request(app)
+				.post('/api/articles')
+				.send({
+					title: 'Star Wars',
+					body: 'A long time ago in a galaxy far far away',
+					topic: 'paper',
+					username: 'icellusedkars',
+				})
+				.expect(201)
+				.then((res) => {
+					const { article } = res.body;
+					expect(article).toEqual(expect.any(Object));
+					expect(Object.keys(article)).toEqual(
+						expect.arrayContaining([
+							'article_id',
+							'title',
+							'body',
+							'votes',
+							'topic',
+							'author',
+							'created_at',
+						])
+					);
+				});
+		});
 		describe('PATH: /:article_id', () => {
+			// individual articles
 			test('GET 200: responds with an object of the reqested article with the correct keys', () => {
 				return request(app)
 					.get('/api/articles/1')
@@ -139,9 +166,34 @@ describe('PATH: /api', () => {
 						expect(votes).toBe(95);
 					});
 			});
-
-			describe('PATH: /:article_id/comments', () => {});
 		});
+
+		describe('PATH: /:article_id/comments', () => {
+			// comments on individual articles
+			test('POST 201: responds with the newly posted comment', () => {
+				return request(app)
+					.post('/api/articles/5/comments')
+					.send({
+						username: 'icellusedkars',
+						body:
+							'Reminder! - Remember that as username is an FK, and we are in test data, you need to use a user that already exists to avoid this: insert or update on table "comments" violates foreign key constraint "comments_author_foreign"',
+					})
+					.expect(201)
+					.then(({ body: { comment } }) => {
+						expect(comment).toEqual(expect.any(Object));
+						expect(Object.keys(comment)).toEqual(
+							expect.arrayContaining([
+								'author',
+								'comment_id',
+								'article_id',
+								'body',
+								'votes',
+							])
+						);
+					});
+			});
+		});
+		//articles closing
 	});
 	// api closing
 });

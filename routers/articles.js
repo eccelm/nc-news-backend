@@ -10,13 +10,16 @@ const {
 	postNewArticle,
 } = require('../controllers/articles');
 
-articlesRouter.route('/:article_id').get(getArticleById).patch(patchArticle);
-// 	.delete(deleteArticle);
+articlesRouter
+	.route('/:article_id')
+	.get(getArticleById)
+	.patch(patchArticle)
+	.delete(deleteArticle);
 
-// articlesRouter
-// 	.route('/:article_id/comments')
-// 	.get(getArticleComments)
-// 	.post(postCommentToArticle);
+articlesRouter
+	.route('/:article_id/comments')
+	.get(getArticleComments)
+	.post(postCommentToArticle);
 
 articlesRouter.route('/').get(getAllArticles).post(postNewArticle);
 

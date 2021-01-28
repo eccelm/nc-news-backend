@@ -26,11 +26,15 @@ const updateArticle = (reqBody, article_id) => {
 
 const removeArticle = () => {};
 
-const addNewArticle = () => {};
+const addNewArticle = (newArticle) => {
+	return connection.insert(newArticle).into('articles').returning('*');
+};
 // Article Comments
 const fetchArticleComments = () => {};
 
-const addCommentToArticle = () => {};
+const addCommentToArticle = (newComment) => {
+	return connection.insert(newComment).into('comments').returning('*');
+};
 
 module.exports = {
 	removeArticle,

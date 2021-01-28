@@ -25,7 +25,7 @@ const postNewUser = (req, res, next) => {
 	const { name, username, avatar_url } = req.body;
 	addUser({ name, username, avatar_url })
 		.then((newUser) => {
-			res.status(201).send(newUser[0]);
+			res.status(201).send({ user: newUser[0] });
 		})
 		.catch(next);
 };
