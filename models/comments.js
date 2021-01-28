@@ -1,5 +1,11 @@
 const connection = require('../db/connection');
 
+const fetchArticleComments = () => {};
+
+const addCommentToArticle = (newComment) => {
+	return connection.insert(newComment).into('comments').returning('*');
+};
+
 const updateComment = (inc_votes, comment_id) => {
 	return connection
 		.increment('votes', inc_votes)
@@ -13,6 +19,8 @@ const removeComment = (comment_id) => {
 };
 
 module.exports = {
+	fetchArticleComments,
+	addCommentToArticle,
 	updateComment,
 	removeComment,
 };

@@ -3,8 +3,6 @@ const {
 	fetchAllArticles,
 	fetchArticleById,
 	updateArticle,
-	fetchArticleComments,
-	addCommentToArticle,
 	addNewArticle,
 } = require('../models/articles');
 
@@ -47,26 +45,12 @@ const patchArticle = (req, res, next) => {
 		.catch(next);
 };
 
-const getArticleComments = (req, res, next) => {};
-
-const postCommentToArticle = (req, res, next) => {
-	const { article_id } = req.params;
-	const { body, username } = req.body;
-	const newComment = { author: username, article_id, body };
-
-	addCommentToArticle(newComment).then((newComment) => {
-		res.status(201).send({ comment: newComment[0] });
-	});
-};
-
 module.exports = {
 	deleteArticle,
 	getAllArticles,
 	getArticleById,
 	patchArticle,
 	postNewArticle,
-	postCommentToArticle,
-	getArticleComments,
 };
 
 /*

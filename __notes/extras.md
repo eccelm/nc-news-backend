@@ -2,7 +2,7 @@
 
 Potential Refactors:
 Array destructuring?
-Can /Should article/comments move into comments model/controller?
+Can /Should article/comments move into comments
 ##User Profile:
 Create new User
 Change your avatar - Patch
@@ -18,21 +18,6 @@ GET /api/topics
 > > > Time to go solo! <<<
 > > > TO DO :
 
-DELETE /api/articles/:article_id
-PATCH /api/articles/:article_id
-GET /api/articles/:article_id
-
-POST /api/articles/:article_id/comments
 GET /api/articles/:article_id/comments
-
 GET /api/articles
-POST /api/articles
-
-PATCH /api/comments/:comment_id
-DELETE /api/comments/:comment_id
-
 GET /api
-
-DELETE /api/articles/:article_id
-
-POST /api/users

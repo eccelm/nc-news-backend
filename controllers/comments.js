@@ -1,4 +1,21 @@
-const { updateComment, removeComment } = require('../models/comments');
+const {
+	fetchArticleComments,
+	addCommentToArticle,
+	updateComment,
+	removeComment,
+} = require('../models/comments');
+
+const getArticleComments = (req, res, next) => {};
+
+const postCommentToArticle = (req, res, next) => {
+	const { article_id } = req.params;
+	const { body, username } = req.body;
+	const newComment = { author: username, article_id, body };
+
+	addCommentToArticle(newComment).then((newComment) => {
+		res.status(201).send({ comment: newComment[0] });
+	});
+};
 
 const patchComment = (req, res, next) => {
 	const { inc_votes } = req.body;
@@ -18,4 +35,9 @@ const deleteComment = (req, res, next) => {
 	});
 };
 
-module.exports = { patchComment, deleteComment };
+module.exports = {
+	getArticleComments,
+	postCommentToArticle,
+	patchComment,
+	deleteComment,
+};

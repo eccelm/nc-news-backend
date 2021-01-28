@@ -31,19 +31,11 @@ const removeArticle = (article_id) => {
 const addNewArticle = (newArticle) => {
 	return connection.insert(newArticle).into('articles').returning('*');
 };
-// Article Comments
-const fetchArticleComments = () => {};
-
-const addCommentToArticle = (newComment) => {
-	return connection.insert(newComment).into('comments').returning('*');
-};
 
 module.exports = {
 	removeArticle,
-	fetchArticleComments,
 	fetchAllArticles,
 	fetchArticleById,
 	addNewArticle,
 	updateArticle,
-	addCommentToArticle,
 };
