@@ -5,7 +5,17 @@ const {
 	removeComment,
 } = require('../models/comments');
 
-const getArticleComments = (req, res, next) => {};
+const getArticleComments = (req, res, next) => {
+	const { article_id } = req.params;
+	const { sort_by } = req.query;
+	const { order } = req.query;
+
+	fetchArticleComments(article_id, sort_by, order)
+		.then((comments) => {
+			res.status(200).send({ comments });
+		})
+		.catch(next);
+};
 
 const postCommentToArticle = (req, res, next) => {
 	const { article_id } = req.params;

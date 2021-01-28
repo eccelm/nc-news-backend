@@ -13,6 +13,8 @@ const {
 	postCommentToArticle,
 } = require('../controllers/comments');
 
+articlesRouter.route('/').get(getAllArticles).post(postNewArticle);
+
 articlesRouter
 	.route('/:article_id')
 	.get(getArticleById)
@@ -23,8 +25,6 @@ articlesRouter
 	.route('/:article_id/comments')
 	.get(getArticleComments)
 	.post(postCommentToArticle);
-
-articlesRouter.route('/').get(getAllArticles).post(postNewArticle);
 
 module.exports = articlesRouter;
 

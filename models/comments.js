@@ -1,6 +1,13 @@
 const connection = require('../db/connection');
 
-const fetchArticleComments = () => {};
+const fetchArticleComments = (article_id, sort_by, order) => {
+	return connection
+		.select('*')
+		.from('comments')
+		.orderBy(sort_by || 'created_at', order)
+		.returning('*')
+		.where('article_id', '=', article_id);
+};
 
 const addCommentToArticle = (newComment) => {
 	return connection.insert(newComment).into('comments').returning('*');

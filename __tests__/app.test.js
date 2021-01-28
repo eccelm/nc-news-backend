@@ -139,7 +139,7 @@ describe('PATH: /api', () => {
 					});
 			});
 
-			test('PATCH returns 202 and increases the vote count by the passed amount', () => {
+			test('PATCH 202: and increases the vote count by the passed amount', () => {
 				const increaseBy = { inc_votes: 5 };
 				return request(app)
 					.patch('/api/articles/1')
@@ -153,7 +153,7 @@ describe('PATH: /api', () => {
 						expect(votes).toBe(105);
 					});
 			});
-			test('PATCH returns 202 and decreases the vote count by the passed amount', () => {
+			test('PATCH 202: and decreases the vote count by the passed amount', () => {
 				const increaseBy = { inc_votes: -5 };
 				return request(app)
 					.patch('/api/articles/1')
@@ -205,6 +205,78 @@ describe('PATH: /api', () => {
 
 		describe('PATH: /:article_id/comments', () => {
 			// comments on individual articles
+			test('GET 200: responds with an array of comments when an article has comments', () => {
+				return request(app)
+					.get('/api/articles/1/comments')
+					.expect(200)
+					.then((res) => {
+						const { comments } = res.body;
+						expect(comments).toEqual(expect.any(Array));
+						expect(comments.length).toBeGreaterThan(0);
+					});
+			});
+			test('GET 200: responds with an empty array when an article has comments', () => {
+				return request(app)
+					.get('/api/articles/2/comments')
+					.expect(200)
+					.then((res) => {
+						const { comments } = res.body;
+						expect(comments).toEqual(expect.any(Array));
+						expect(comments.length).toBe(0);
+					});
+			});
+			test('GET 200: each comment returned should have the correct keys', () => {
+				return request(app)
+					.get('/api/articles/1/comments')
+					.expect(200)
+					.then((res) => {
+						const { comments } = res.body;
+						expect(Object.keys(comments[0])).toEqual(
+							expect.arrayContaining([
+								'comment_id',
+								'votes',
+								'created_at',
+								'author',
+								'body',
+							])
+						);
+					});
+			});
+
+			test('GET 200: accepts a sort_by query that defaults to the "created_at" column', () => {
+				return request(app)
+					.get('/api/articles/1/comments/')
+					.expect(200)
+					.then((res) => {
+						const { comments } = res.body;
+						expect(comments).toBeSortedBy('created_at');
+					});
+			});
+
+			test('GET 200: uses provided sort_by query and not the default', () => {
+				return request(app)
+					.get('/api/articles/1/comments?sort_by=votes')
+					.expect(200)
+					.then((res) => {
+						const { comments } = res.body;
+						expect(comments).toBeSortedBy('votes');
+					});
+			});
+
+			test('GET 200: orders the comments based on an order query', () => {
+				return request(app)
+					.get('/api/articles/1/comments?order=desc')
+					.expect(200)
+					.then((res) => {
+						const { comments } = res.body;
+
+						expect(comments).toBeSortedBy('created_at', {
+							descending: true,
+							// coerce: true,
+						});
+					});
+			});
+
 			test('POST 201: responds with the newly posted comment', () => {
 				return request(app)
 					.post('/api/articles/5/comments')
