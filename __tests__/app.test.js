@@ -10,6 +10,17 @@ describe('PATH: /api', () => {
 	afterAll(() => {
 		return connection.destroy();
 	});
+	test('should return the endpoints from the json file', () => {
+		return request(app)
+			.get('/api')
+			.expect(200)
+			.then((res) => {
+				const { endpoints } = res.body;
+
+				//console.log(endpoints);
+				expect(typeof endpoints).toBe('object');
+			});
+	});
 
 	describe('PATH: api/topics', () => {
 		test('GET 200: responds with an array of all topics, each topic has the correct keys', () => {
@@ -159,14 +170,11 @@ describe('PATH: /api', () => {
 				.get('/api/articles?author=butter_bridge')
 				.expect(200)
 				.then(({ body: { articles } }) => {
-					expect(articles.length).toBe(3)
+					expect(articles.length).toBe(3);
 					expect(
-						articles
-							.every(function(article){
-							
+						articles.every(function (article) {
 							return article.author == 'butter_bridge';
-							})
-						
+						})
 					).toBe(true);
 				});
 		});
@@ -175,13 +183,11 @@ describe('PATH: /api', () => {
 				.get('/api/articles?topic=mitch')
 				.expect(200)
 				.then(({ body: { articles } }) => {
-					expect(articles.length).toBe(11)
+					expect(articles.length).toBe(11);
 					expect(
-						articles
-							.every(function(article){
+						articles.every(function (article) {
 							return article.topic === 'mitch';
-							})
-						
+						})
 					).toBe(true);
 				});
 		});
@@ -191,17 +197,15 @@ describe('PATH: /api', () => {
 				.get('/api/articles?author=butter_bridge&topic=mitch')
 				.expect(200)
 				.then(({ body: { articles } }) => {
-				
 					expect(
-						articles
-							.every(function(article){
-							return (article.author === 'butter_bridge' && article.topic === 'mitch');
-							})
-						
+						articles.every(function (article) {
+							return (
+								article.author === 'butter_bridge' && article.topic === 'mitch'
+							);
+						})
 					).toBe(true);
 				});
 		});
-
 
 		test('POST 201: responds with the newly posted article', () => {
 			return request(app)
@@ -215,6 +219,7 @@ describe('PATH: /api', () => {
 				.expect(201)
 				.then((res) => {
 					const { article } = res.body;
+
 					expect(article).toEqual(expect.any(Object));
 					expect(Object.keys(article)).toEqual(
 						expect.arrayContaining([

@@ -1,0 +1,75 @@
+{"intro": "Welcome to the hosted restAPI for my react news app, the /api list is not exhaustive but gives an idea of the options available",
+  "GET /api": {
+    "description": "serves up a json representation of all the available endpoints of the api"
+  },
+  "GET /api/topics": {
+    "description": "serves an array of all topics",
+    "queries": [],
+    "exampleResponse": {
+      "topics": [{ "slug": "String", "description": "String" }, { "slug": "football", "description": "Footie!" }]
+    }
+  },
+  "GET /api/articles": {
+    "description": "serves an array of all topics",
+    "queries": ["author", "topic", "sort_by", "order"],
+    "exampleResponse": {
+      "articles": [
+        {
+          "title": "Seafood substitutions are increasing",
+          "topic": "cooking",
+          "author": "weegembump",
+          "body": "Text from the article..",
+          "created_at": 1527695953341,
+          "votes": 0,
+          "comment_count": 5,
+          "article_id": 33
+        },
+        {
+          "title": "String",
+          "topic": "String",
+          "author": "String",
+          "body": "String",
+          "created_at": "String",
+          "votes": "Number",
+          "comment_count": "String",
+          "article_id": "Number"
+        }
+      ]
+    }
+  },
+  "POST /api/articles": {
+    "description": "posts a new article",
+    "exampleRequest": {
+    "body": "String",
+    "username": "String",
+    "title": "String",
+   "topic": "String"
+  },
+    "exampleResponse": {
+      "article": {
+        "title": "Seafood substitutions are increasing",
+        "topic": "cooking",
+        "author": "weegembump",
+        "body": "Text from the article..",
+        "created_at": 1527695953341,
+        "votes": 0,
+        "comment_count": 5,
+        "article_id": 33
+      }
+    }
+  },
+
+  "GET /api/users": {
+    "description": "serves an array of all users",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "grumpy19",
+          "name": "Paul Grump",
+          "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/7/78/Mr-Grumpy-3A.PNG/revision/latest?cb=20170707233013"
+        }
+      ]
+    }
+  }
+}
