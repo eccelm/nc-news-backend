@@ -12,6 +12,8 @@
 
 - Post 201 for new article doesn't have a comment_count ? When is that created?
 
+- What causes there to by x6 console logs above return connection in model fetchAllArticles --> 6 query fields? Is this normal behavior?
+
 ### User Profile:
 
 Change your avatar - Patch

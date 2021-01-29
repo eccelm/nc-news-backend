@@ -183,7 +183,7 @@ describe('PATH: /api', () => {
 				.get('/api/articles?topic=mitch')
 				.expect(200)
 				.then(({ body: { articles } }) => {
-					expect(articles.length).toBe(11);
+					expect(articles.length).toBe(10);
 					expect(
 						articles.every(function (article) {
 							return article.topic === 'mitch';
@@ -206,7 +206,31 @@ describe('PATH: /api', () => {
 					).toBe(true);
 				});
 		});
-
+		test('GET 200: can set a limit query', () => {
+			return request(app)
+				.get('/api/articles?limit=5')
+				.expect(200)
+				.then(({ body: { articles } }) => {
+					expect(articles.length).toBe(5);
+				});
+		});
+		test('GET 200: defaults to a limit of 10', () => {
+			return request(app)
+				.get('/api/articles')
+				.expect(200)
+				.then(({ body: { articles } }) => {
+					expect(articles.length).toBe(10);
+				});
+		});
+		test('GET 200: can use a page query with default limit 10 to return the second page of results', () => {
+			return request(app)
+				.get('/api/articles?sort_by=article_id&p=2')
+				.expect(200)
+				.then(({ body: { articles } }) => {
+					expect(articles[0].article_id === 2 && articles[1] === 1);
+					expect(articles.length).toBe(2);
+				});
+		});
 		test('POST 201: responds with the newly posted article', () => {
 			return request(app)
 				.post('/api/articles')

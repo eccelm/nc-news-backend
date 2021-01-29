@@ -1,21 +1,37 @@
 const connection = require('../db/connection');
 
-const fetchAllArticles = (sort_by='created_at', order='desc', author, topic) => {
-
+const fetchAllArticles = (
+	sort_by = 'created_at',
+	order = 'desc',
+	author,
+	topic,
+	limit,
+	p
+) => {
 	return connection
-	.select('articles.*')
-	.from('articles')
-	.leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
-	.count('comments.comment_id AS comment_count')
-	.groupBy('articles.article_id')
-	.modify((queryBuilder)=> {
-		if(author){queryBuilder.where('articles.author', '=', author)}
-		if(topic){queryBuilder.where('articles.topic', '=', topic)}
-	})
-	.orderBy(sort_by, order)
-	.then((articles)=> {
-		return articles
-	})
+		.select('articles.*')
+		.from('articles')
+		.leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
+		.count('comments.comment_id AS comment_count')
+		.limit(parseInt(limit) || 10)
+		.groupBy('articles.article_id')
+		.modify((queryBuilder) => {
+			if (author) {
+				queryBuilder.where('articles.author', '=', author);
+			}
+			if (topic) {
+				queryBuilder.where('articles.topic', '=', topic);
+			}
+			if (p > 1) {
+				queryBuilder.offset(
+					parseInt(limit) * parseInt(p - 1) || 10 * parseInt(p - 1)
+				);
+			}
+		})
+		.orderBy(sort_by, order)
+		.then((articles) => {
+			return articles;
+		});
 };
 
 const fetchArticleById = (article_id) => {

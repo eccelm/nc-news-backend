@@ -21,7 +21,9 @@ const getAllArticles = (req, res, next) => {
 	const { order } = req.query;
 	const { author } = req.query;
 	const { topic } = req.query;
-	fetchAllArticles(sort_by, order, author, topic)
+	const { limit } = req.query;
+	const { p } = req.query;
+	fetchAllArticles(sort_by, order, author, topic, limit, p)
 		.then((articles) => {
 			res.status(200).send({ articles });
 		})
