@@ -17,13 +17,13 @@ const deleteArticle = (req, res, next) => {
 };
 
 const getAllArticles = (req, res, next) => {
-	const {sort_by} = req.query
-	const {order} = req.query
-
-	fetchAllArticles(sort_by, order).then((articles)=>{
-
-		res.status(200).send({articles})
-	})
+	const { sort_by } = req.query;
+	const { order } = req.query;
+	const { author } = req.query;
+	const { topic } = req.query;
+	fetchAllArticles(sort_by, order, author, topic).then((articles) => {
+		res.status(200).send({ articles });
+	});
 };
 
 const postNewArticle = (req, res, next) => {

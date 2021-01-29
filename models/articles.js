@@ -1,6 +1,6 @@
 const connection = require('../db/connection');
 
-const fetchAllArticles = (sort_by='created_at', order='desc') => {
+const fetchAllArticles = (sort_by='created_at', order='desc', author, topic) => {
 
 	return connection
 	.select('articles.*')
@@ -8,6 +8,10 @@ const fetchAllArticles = (sort_by='created_at', order='desc') => {
 	.leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
 	.count('comments.comment_id AS comment_count')
 	.groupBy('articles.article_id')
+	.modify((queryBuilder)=> {
+		if(author){queryBuilder.where('articles.author', '=', author)}
+		if(topic){queryBuilder.where('articles.topic', '=', topic)}
+	})
 	.orderBy(sort_by, order)
 	.then((articles)=> {
 		return articles

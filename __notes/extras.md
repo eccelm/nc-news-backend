@@ -1,7 +1,8 @@
 ## Possible further Routes:
 
 Potential Refactors:
-
+Does a valid search with no results come under error handling ? should it 400 ?? maybe 417 Expectations not met? 
+422 I'm a teapot? 
 ** Improve the Date Formatter to a more readable form with .toUTCString or .toLocaleString (also Date and Time similarly)
 Array destructuring?
 Can /Should article/comments move into comments

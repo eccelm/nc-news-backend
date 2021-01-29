@@ -90,60 +90,119 @@ describe('PATH: /api', () => {
 		// all articles
 		test('GET 200: returns  an array of all the article objects', () => {
 			return request(app)
-			  .get('/api/articles')
-			  .expect(200)
-			  .then(({body: {articles}}) => {
-				 expect(articles).toEqual(expect.any(Array));
-			  });
-		 });
-		 test('GET 200: the returned objects have the correct keys', () => {
+				.get('/api/articles')
+				.expect(200)
+				.then(({ body: { articles } }) => {
+					expect(articles).toEqual(expect.any(Array));
+				});
+		});
+		test('GET 200: the returned objects have the correct keys', () => {
 			return request(app)
-			  .get('/api/articles')
-			  .expect(200)
-			  .then(({body: {articles}}) => {
-			expect(Object.keys(articles[0])).toEqual(expect.arrayContaining([ 'author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes', 'comment_count']))
-		 });
-	  });
- 
-	  test('GET 200: accepts a sort_by query that defaults to the "created_at" column', () => {
-      return request(app)
-      .get('/api/articles')
-      .expect(200)
-      .then(({body: {articles}}) => { 
-        expect(articles).toBeSortedBy('created_at', {descending: true})
-      })
-    });
+				.get('/api/articles')
+				.expect(200)
+				.then(({ body: { articles } }) => {
+					expect(Object.keys(articles[0])).toEqual(
+						expect.arrayContaining([
+							'author',
+							'title',
+							'article_id',
+							'body',
+							'topic',
+							'created_at',
+							'votes',
+							'comment_count',
+						])
+					);
+				});
+		});
 
-    test('GET 200: returns the articles according to a sort_by query', () => {
-      return request(app)
-      .get('/api/articles?sort_by=title')
-      .expect(200)
-      .then(({body: {articles}}) => { 
+		test('GET 200: accepts a sort_by query that defaults to the "created_at" column', () => {
+			return request(app)
+				.get('/api/articles')
+				.expect(200)
+				.then(({ body: { articles } }) => {
+					expect(articles).toBeSortedBy('created_at', { descending: true });
+				});
+		});
 
-			expect(articles).toBeSortedBy('title', {
-				descending: true
-			 })
-		 })
-    });
+		test('GET 200: returns the articles according to a sort_by query', () => {
+			return request(app)
+				.get('/api/articles?sort_by=title')
+				.expect(200)
+				.then(({ body: { articles } }) => {
+					expect(articles).toBeSortedBy('title', {
+						descending: true,
+					});
+				});
+		});
 
- 
-	 test('GET 200: accepts an order query that defaults to descending', () => {
-      return request(app)
-      .get('/api/articles')
-      .expect(200)
-      .then(({body: {articles}}) => { 
-        expect(articles).toBeSorted({descending: true})
-      })
-    });
- 
-	 test('GET 200: orders the articles correctly when passed both a sort_by and "asc" order query', () => {
-      return request(app)
-      .get('/api/articles?sort_by=article_id&order=asc')
-      .expect(200)
-      .then(({body: {articles}}) => { 
-        expect(articles).toBeSortedBy('article_id', {descending: false})
-      })
-    });
+		test('GET 200: accepts an order query that defaults to descending', () => {
+			return request(app)
+				.get('/api/articles')
+				.expect(200)
+				.then(({ body: { articles } }) => {
+					expect(articles).toBeSorted({ descending: true });
+				});
+		});
+
+		test('GET 200: orders the articles correctly when passed both a sort_by and "asc" order query', () => {
+			return request(app)
+				.get('/api/articles?sort_by=article_id&order=asc')
+				.expect(200)
+				.then(({ body: { articles } }) => {
+					expect(articles).toBeSortedBy('article_id', { descending: false });
+				});
+		});
+
+		test('GET 200: will filter by an existing author', () => {
+			return request(app)
+				.get('/api/articles?author=butter_bridge')
+				.expect(200)
+				.then(({ body: { articles } }) => {
+					expect(articles.length).toBe(3)
+					expect(
+						articles
+							.every(function(article){
+							
+							return article.author == 'butter_bridge';
+							})
+						
+					).toBe(true);
+				});
+		});
+		test('GET 200: will filter by an existing topic', () => {
+			return request(app)
+				.get('/api/articles?topic=mitch')
+				.expect(200)
+				.then(({ body: { articles } }) => {
+					expect(articles.length).toBe(11)
+					expect(
+						articles
+							.every(function(article){
+							return article.topic === 'mitch';
+							})
+						
+					).toBe(true);
+				});
+		});
+
+		test('GET 200: will filter by author and topic when articles matching both exist', () => {
+			return request(app)
+				.get('/api/articles?author=butter_bridge&topic=mitch')
+				.expect(200)
+				.then(({ body: { articles } }) => {
+				
+					expect(
+						articles
+							.every(function(article){
+							return (article.author === 'butter_bridge' && article.topic === 'mitch');
+							})
+						
+					).toBe(true);
+				});
+		});
+
+
 		test('POST 201: responds with the newly posted article', () => {
 			return request(app)
 				.post('/api/articles')
