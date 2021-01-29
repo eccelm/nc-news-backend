@@ -96,7 +96,7 @@ describe('PATH: /api', () => {
 				 expect(articles).toEqual(expect.any(Array));
 			  });
 		 });
-		 test('GET 200 the returned objects have the correct keys', () => {
+		 test('GET 200: the returned objects have the correct keys', () => {
 			return request(app)
 			  .get('/api/articles')
 			  .expect(200)
@@ -105,6 +105,45 @@ describe('PATH: /api', () => {
 		 });
 	  });
  
+	  test('GET 200: accepts a sort_by query that defaults to the "created_at" column', () => {
+      return request(app)
+      .get('/api/articles')
+      .expect(200)
+      .then(({body: {articles}}) => { 
+        expect(articles).toBeSortedBy('created_at', {descending: true})
+      })
+    });
+
+    test('GET 200: returns the articles according to a sort_by query', () => {
+      return request(app)
+      .get('/api/articles?sort_by=title')
+      .expect(200)
+      .then(({body: {articles}}) => { 
+
+			expect(articles).toBeSortedBy('title', {
+				descending: true
+			 })
+		 })
+    });
+
+ 
+	 test('GET 200: accepts an order query that defaults to descending', () => {
+      return request(app)
+      .get('/api/articles')
+      .expect(200)
+      .then(({body: {articles}}) => { 
+        expect(articles).toBeSorted({descending: true})
+      })
+    });
+ 
+	 test('GET 200: orders the articles correctly when passed both a sort_by and "asc" order query', () => {
+      return request(app)
+      .get('/api/articles?sort_by=article_id&order=asc')
+      .expect(200)
+      .then(({body: {articles}}) => { 
+        expect(articles).toBeSortedBy('article_id', {descending: false})
+      })
+    });
 		test('POST 201: responds with the newly posted article', () => {
 			return request(app)
 				.post('/api/articles')

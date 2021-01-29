@@ -1,6 +1,8 @@
 ## Possible further Routes:
 
 Potential Refactors:
+
+** Improve the Date Formatter to a more readable form with .toUTCString or .toLocaleString (also Date and Time similarly)
 Array destructuring?
 Can /Should article/comments move into comments
 ##User Profile:

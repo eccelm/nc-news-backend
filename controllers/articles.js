@@ -17,7 +17,11 @@ const deleteArticle = (req, res, next) => {
 };
 
 const getAllArticles = (req, res, next) => {
-	fetchAllArticles().then((articles)=>{
+	const {sort_by} = req.query
+	const {order} = req.query
+
+	fetchAllArticles(sort_by, order).then((articles)=>{
+
 		res.status(200).send({articles})
 	})
 };
