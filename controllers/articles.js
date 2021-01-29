@@ -21,17 +21,21 @@ const getAllArticles = (req, res, next) => {
 	const { order } = req.query;
 	const { author } = req.query;
 	const { topic } = req.query;
-	fetchAllArticles(sort_by, order, author, topic).then((articles) => {
-		res.status(200).send({ articles });
-	});
+	fetchAllArticles(sort_by, order, author, topic)
+		.then((articles) => {
+			res.status(200).send({ articles });
+		})
+		.catch(next);
 };
 
 const postNewArticle = (req, res, next) => {
 	const { title, body, topic, username: author } = req.body;
 
-	addNewArticle({ title, body, topic, author }).then((newArticle) => {
-		res.status(201).send({ article: newArticle[0] });
-	});
+	addNewArticle({ title, body, topic, author })
+		.then((newArticle) => {
+			res.status(201).send({ article: newArticle[0] });
+		})
+		.catch(next);
 };
 
 const getArticleById = (req, res, next) => {

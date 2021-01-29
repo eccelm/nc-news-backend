@@ -22,9 +22,11 @@ const postCommentToArticle = (req, res, next) => {
 	const { body, username } = req.body;
 	const newComment = { author: username, article_id, body };
 
-	addCommentToArticle(newComment).then((newComment) => {
-		res.status(201).send({ comment: newComment[0] });
-	});
+	addCommentToArticle(newComment)
+		.then((newComment) => {
+			res.status(201).send({ comment: newComment[0] });
+		})
+		.catch(next);
 };
 
 const patchComment = (req, res, next) => {
@@ -40,9 +42,11 @@ const patchComment = (req, res, next) => {
 
 const deleteComment = (req, res, next) => {
 	const { comment_id } = req.params;
-	removeComment(comment_id).then(() => {
-		res.sendStatus(204);
-	});
+	removeComment(comment_id)
+		.then(() => {
+			res.sendStatus(204);
+		})
+		.catch(next);
 };
 
 module.exports = {
