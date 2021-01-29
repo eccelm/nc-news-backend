@@ -16,7 +16,11 @@ const deleteArticle = (req, res, next) => {
 		.catch(next);
 };
 
-const getAllArticles = (req, res, next) => {};
+const getAllArticles = (req, res, next) => {
+	fetchAllArticles().then((articles)=>{
+		res.status(200).send({articles})
+	})
+};
 
 const postNewArticle = (req, res, next) => {
 	const { title, body, topic, username: author } = req.body;

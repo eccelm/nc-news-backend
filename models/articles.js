@@ -1,6 +1,16 @@
 const connection = require('../db/connection');
 
-const fetchAllArticles = () => {};
+const fetchAllArticles = () => {
+	return connection
+	.select('articles.*')
+	.from('articles')
+	.leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
+	.count('comments.comment_id AS comment_count')
+	.groupBy('articles.article_id')
+	.then((articles)=> {
+		return articles
+	})
+};
 
 const fetchArticleById = (article_id) => {
 	return connection

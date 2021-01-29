@@ -88,6 +88,23 @@ describe('PATH: /api', () => {
 	});
 	describe('PATH: api/articles', () => {
 		// all articles
+		test('GET 200: returns  an array of all the article objects', () => {
+			return request(app)
+			  .get('/api/articles')
+			  .expect(200)
+			  .then(({body: {articles}}) => {
+				 expect(articles).toEqual(expect.any(Array));
+			  });
+		 });
+		 test('GET 200 the returned objects have the correct keys', () => {
+			return request(app)
+			  .get('/api/articles')
+			  .expect(200)
+			  .then(({body: {articles}}) => {
+			expect(Object.keys(articles[0])).toEqual(expect.arrayContaining([ 'author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes', 'comment_count']))
+		 });
+	  });
+ 
 		test('POST 201: responds with the newly posted article', () => {
 			return request(app)
 				.post('/api/articles')
