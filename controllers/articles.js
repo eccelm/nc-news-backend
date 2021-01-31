@@ -17,12 +17,8 @@ const deleteArticle = (req, res, next) => {
 };
 
 const getAllArticles = (req, res, next) => {
-	const { sort_by } = req.query;
-	const { order } = req.query;
-	const { author } = req.query;
-	const { topic } = req.query;
-	const { limit } = req.query;
-	const { p } = req.query;
+	const { sort_by, order, author, topic, limit, p } = req.query;
+
 	fetchAllArticles(sort_by, order, author, topic, limit, p)
 		.then((articles) => {
 			res.status(200).send({ articles });

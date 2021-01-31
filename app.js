@@ -1,10 +1,14 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const apiRouter = require("./routers/api");
-
+const apiRouter = require('./routers/api');
+/*
+ *
+ * WILL NEED CORS FOR FRONT END
+ *
+ */
 app.use(express.json());
 // happy path
-app.use("/api", apiRouter);
+app.use('/api', apiRouter);
 //error handlers
 
 module.exports = app;
