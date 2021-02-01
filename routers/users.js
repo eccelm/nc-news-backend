@@ -4,9 +4,16 @@ const {
   getUserByUsername,
   postNewUser,
 } = require('../controllers/users');
+const {send405} = require("../controllers/errors")
 
-usersRouter.route('/').get(getAllUsers).post(postNewUser);
+usersRouter
+  .route('/')
+  .get(getAllUsers)
+  .post(postNewUser)
+  .all(send405);
 
-usersRouter.route('/:username').get(getUserByUsername);
+usersRouter
+  .route('/:username')
+  .get(getUserByUsername);
 
 module.exports = usersRouter;

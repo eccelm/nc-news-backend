@@ -1,5 +1,5 @@
 const handlePsqlErrors = (err, req, res, next) => {
-   const badReqCodes = ['23502', '22001']
+   const badReqCodes = ['23502', '22001', '23505']
    console.log(err.code, err.message)
    if(badReqCodes.includes(err.code)) {
      res.status(400).send({ msg: `Bad Request`})
@@ -7,7 +7,13 @@ const handlePsqlErrors = (err, req, res, next) => {
      next(err)
    }
  }
-
+ const handleCustomErrors = (err, req, res, next) => {
+   if (err.status) { 
+     res.status(err.status).send({msg: err.msg})
+   } else {
+   next(err)
+     }
+  }
 
 const internalErrorHandler = (err, req, res, next) => {
    console.log(err, '<<<<<< The unhandled error');
@@ -22,4 +28,4 @@ const send405 = (req, res, next) => {
 
 
 
-module.exports = {handlePsqlErrors, internalErrorHandler, send404, send405 };
+module.exports = {handleCustomErrors, handlePsqlErrors, internalErrorHandler, send404, send405 };

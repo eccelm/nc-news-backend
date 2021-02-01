@@ -14,8 +14,16 @@ const getAllUsers = (req, res, next) => {
 
 const getUserByUsername = (req, res, next) => {
 	const { username } = req.params;
+	console.log(req.params)
 	fetchUserByUsername(username)
 		.then((user) => {
+	
+			if(!user) {
+				return Promise.reject({
+					status: 404,
+					msg: `No user was found for the username: ${username}`
+				})
+			}
 			res.status(200).send({ user });
 		})
 		.catch(next);
