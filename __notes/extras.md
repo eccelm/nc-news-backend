@@ -9,10 +9,9 @@
 
 - Add in VIEWS ! 'A View, in the context of a Model View Controller (MVC) architecture, is a software class that contains a template and data form and produces a response for the browser. It receives data from the Controller of the MVC and packages it and presents it to the browser for display' https://github.com/expressjs/express/tree/master/examples/mvc/views
 
-- Does a valid search with no results come under error handling ? should it 400 ?? maybe 417 Expectations not met?
-  418 I'm a teapot?
 
-- Improve the Date Formatter to a more readable form with .toUTCString or .toLocaleString (also Date and Time similarly)
+- Ignore below leave formatting to front end / find Knex workaround for toLocaleString()
+Improve the Date Formatter to a more readable form with .toUTCString or .toLocaleString (also Date and Time similarly)
 
 - Array destructuring?
 
@@ -25,10 +24,16 @@
 Change your avatar - Patch
 Delete profile --> what consequences for data left behind, articles, comments etc? --> Look at set-up between article deletion and CASCADE for the associated comments
 
+## Error Handling
+
+- err.message giving back strings like : 
+>insert into "topics" ("description", "slug") values ($1, $2) returning * - value too long for type character varying(35)
+- Could this be used entirely or should only second half be taken? 
+  - .indexOf(' - '), .slice()
+  - Would it be useful to send the err.code instead
+  - Or hard code in each option? 
+
 ### Topics
 
-How best to send a message along with the body??
---> could .json() work alongside send - check Express docs?
+Error handling --> using datatypes other than string e.g. slug: {test: true} isn't causing an issue??
 
-{msghere: topics[0] }
-// "Wahoo, you've posted a new topic!" --> Optional add in - Or easier on front end to add message and style the data?

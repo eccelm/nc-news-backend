@@ -12,6 +12,7 @@ const postNewTopic = (req, res, next) => {
 	const { slug, description } = req.body;
 	addTopic({ slug, description })
 		.then((newTopic) => {
+		
 			res.status(201).send({ topic: newTopic[0] });
 		})
 		.catch(next);
