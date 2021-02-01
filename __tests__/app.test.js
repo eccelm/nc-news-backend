@@ -21,64 +21,67 @@ describe('PATH: /api', () => {
 				expect(typeof endpoints).toBe('object');
 			});
 	});
-
-	describe('PATH: api/topics', () => {
-		test('GET 200: responds with an array of all topics, each topic has the correct keys', () => {
-			return request(app)
-				.get('/api/topics')
-				.expect(200)
-				.then((res) => {
-					const { topics } = res.body;
-					expect(topics).toEqual(expect.any(Array));
-					expect(topics[0]).toHaveProperty('slug');
-					expect(topics[0]).toHaveProperty('description');
-				});
-		});
-		test('POST 201: successfully adds a new topic and returns the post details', () => {
-			return request(app)
-				.post('/api/topics')
-				.send({ slug: 'testing', description: 'I am a test' })
-				.expect(201)
-				.then(({ body: { topic } }) => {
-					expect(topic).toEqual({
-						slug: 'testing',
-						description: 'I am a test',
+	describe('Topics', () => {
+		describe('PATH: api/topics', () => {
+			test('GET 200: responds with an array of all topics, each topic has the correct keys', () => {
+				return request(app)
+					.get('/api/topics')
+					.expect(200)
+					.then((res) => {
+						const { topics } = res.body;
+						expect(topics).toEqual(expect.any(Array));
+						expect(topics[0]).toHaveProperty('slug');
+						expect(topics[0]).toHaveProperty('description');
 					});
-				});
+			});
+			test('POST 201: successfully adds a new topic and returns the post details', () => {
+				return request(app)
+					.post('/api/topics')
+					.send({ slug: 'testing', description: 'I am a test' })
+					.expect(201)
+					.then(({ body: { topic } }) => {
+						expect(topic).toEqual({
+							slug: 'testing',
+							description: 'I am a test',
+						});
+					});
+			});
 		});
 		// topics closing
 	});
-
-	describe('PATH: api/users', () => {
-		test('GET 200: responds with an array of all users, and each user object has the correct keys', () => {
-			return request(app)
-				.get('/api/users')
-				.expect(200)
-				.then((res) => {
-					const { users } = res.body;
-					expect(users).toEqual(expect.any(Array));
-					expect(users[0]).toHaveProperty('name');
-					expect(users[0]).toHaveProperty('username');
-					expect(users[0]).toHaveProperty('avatar_url');
-				});
-		});
-		test('POST 201: should add a new user, and return the user details', () => {
-			return request(app)
-				.post('/api/users')
-				.send({
-					name: 'Cuba E',
-					username: 'CubaTheStaffy',
-					avatar_url: 'https://www.instagram.com/p/CKbpvsSABfq/',
-				})
-				.expect(201)
-				.then(({ body: { user } }) => {
-					expect(user).toMatchObject({
+	describe('Users', () => {
+		describe('PATH: api/users', () => {
+			test('GET 200: responds with an array of all users, and each user object has the correct keys', () => {
+				return request(app)
+					.get('/api/users')
+					.expect(200)
+					.then((res) => {
+						const { users } = res.body;
+						expect(users).toEqual(expect.any(Array));
+						expect(users[0]).toHaveProperty('name');
+						expect(users[0]).toHaveProperty('username');
+						expect(users[0]).toHaveProperty('avatar_url');
+					});
+			});
+			test('POST 201: should add a new user, and return the user details', () => {
+				return request(app)
+					.post('/api/users')
+					.send({
 						name: 'Cuba E',
 						username: 'CubaTheStaffy',
 						avatar_url: 'https://www.instagram.com/p/CKbpvsSABfq/',
+					})
+					.expect(201)
+					.then(({ body: { user } }) => {
+						expect(user).toMatchObject({
+							name: 'Cuba E',
+							username: 'CubaTheStaffy',
+							avatar_url: 'https://www.instagram.com/p/CKbpvsSABfq/',
+						});
 					});
-				});
+			});
 		});
+
 		describe('PATH /:username', () => {
 			test('GET 200: responds with an object of the user with the correct keys', () => {
 				return request(app)
@@ -97,166 +100,169 @@ describe('PATH: /api', () => {
 		});
 		// users closing
 	});
-	describe('PATH: api/articles', () => {
-		// all articles
-		test('GET 200: returns  an array of all the article objects', () => {
-			return request(app)
-				.get('/api/articles')
-				.expect(200)
-				.then(({ body: { articles } }) => {
-					expect(articles).toEqual(expect.any(Array));
-				});
-		});
-		test('GET 200: the returned objects have the correct keys', () => {
-			return request(app)
-				.get('/api/articles')
-				.expect(200)
-				.then(({ body: { articles } }) => {
-					expect(Object.keys(articles[0])).toEqual(
-						expect.arrayContaining([
-							'author',
-							'title',
-							'article_id',
-							'body',
-							'topic',
-							'created_at',
-							'votes',
-							'comment_count',
-						])
-					);
-				});
-		});
-
-		test('GET 200: accepts a sort_by query that defaults to the "created_at" column', () => {
-			return request(app)
-				.get('/api/articles')
-				.expect(200)
-				.then(({ body: { articles } }) => {
-					expect(articles).toBeSortedBy('created_at', { descending: true });
-				});
-		});
-
-		test('GET 200: returns the articles according to a sort_by query', () => {
-			return request(app)
-				.get('/api/articles?sort_by=title')
-				.expect(200)
-				.then(({ body: { articles } }) => {
-					expect(articles).toBeSortedBy('title', {
-						descending: true,
+	describe('Articles', () => {
+		describe('PATH: api/articles', () => {
+			// all articles
+			test('GET 200: returns  an array of all the article objects', () => {
+				return request(app)
+					.get('/api/articles')
+					.expect(200)
+					.then(({ body: { articles } }) => {
+						expect(articles).toEqual(expect.any(Array));
 					});
-				});
-		});
+			});
+			test('GET 200: the returned objects have the correct keys', () => {
+				return request(app)
+					.get('/api/articles')
+					.expect(200)
+					.then(({ body: { articles } }) => {
+						expect(Object.keys(articles[0])).toEqual(
+							expect.arrayContaining([
+								'author',
+								'title',
+								'article_id',
+								'body',
+								'topic',
+								'created_at',
+								'votes',
+								'comment_count',
+							])
+						);
+					});
+			});
 
-		test('GET 200: accepts an order query that defaults to descending', () => {
-			return request(app)
-				.get('/api/articles')
-				.expect(200)
-				.then(({ body: { articles } }) => {
-					expect(articles).toBeSorted({ descending: true });
-				});
-		});
+			test('GET 200: accepts a sort_by query that defaults to the "created_at" column', () => {
+				return request(app)
+					.get('/api/articles')
+					.expect(200)
+					.then(({ body: { articles } }) => {
+						expect(articles).toBeSortedBy('created_at', { descending: true });
+					});
+			});
 
-		test('GET 200: orders the articles correctly when passed both a sort_by and "asc" order query', () => {
-			return request(app)
-				.get('/api/articles?sort_by=article_id&order=asc')
-				.expect(200)
-				.then(({ body: { articles } }) => {
-					expect(articles).toBeSortedBy('article_id', { descending: false });
-				});
-		});
+			test('GET 200: returns the articles according to a sort_by query', () => {
+				return request(app)
+					.get('/api/articles?sort_by=title')
+					.expect(200)
+					.then(({ body: { articles } }) => {
+						expect(articles).toBeSortedBy('title', {
+							descending: true,
+						});
+					});
+			});
 
-		test('GET 200: will filter by an existing author', () => {
-			return request(app)
-				.get('/api/articles?author=butter_bridge')
-				.expect(200)
-				.then(({ body: { articles } }) => {
-					expect(articles.length).toBe(3);
-					expect(
-						articles.every(function (article) {
-							return article.author == 'butter_bridge';
-						})
-					).toBe(true);
-				});
-		});
-		test('GET 200: will filter by an existing topic', () => {
-			return request(app)
-				.get('/api/articles?topic=mitch')
-				.expect(200)
-				.then(({ body: { articles } }) => {
-					expect(articles.length).toBe(10);
-					expect(
-						articles.every(function (article) {
-							return article.topic === 'mitch';
-						})
-					).toBe(true);
-				});
-		});
+			test('GET 200: accepts an order query that defaults to descending', () => {
+				return request(app)
+					.get('/api/articles')
+					.expect(200)
+					.then(({ body: { articles } }) => {
+						expect(articles).toBeSorted({ descending: true });
+					});
+			});
 
-		test('GET 200: will filter by author and topic when articles matching both exist', () => {
-			return request(app)
-				.get('/api/articles?author=butter_bridge&topic=mitch')
-				.expect(200)
-				.then(({ body: { articles } }) => {
-					expect(
-						articles.every(function (article) {
-							return (
-								article.author === 'butter_bridge' && article.topic === 'mitch'
-							);
-						})
-					).toBe(true);
-				});
-		});
-		test('GET 200: can set a limit query', () => {
-			return request(app)
-				.get('/api/articles?limit=5')
-				.expect(200)
-				.then(({ body: { articles } }) => {
-					expect(articles.length).toBe(5);
-				});
-		});
-		test('GET 200: defaults to a limit of 10', () => {
-			return request(app)
-				.get('/api/articles')
-				.expect(200)
-				.then(({ body: { articles } }) => {
-					expect(articles.length).toBe(10);
-				});
-		});
-		test('GET 200: can use a page query with default limit 10 to return the second page of results', () => {
-			return request(app)
-				.get('/api/articles?sort_by=article_id&p=2')
-				.expect(200)
-				.then(({ body: { articles } }) => {
-					expect(articles[0].article_id === 2 && articles[1] === 1);
-					expect(articles.length).toBe(2);
-				});
-		});
-		test('POST 201: responds with the newly posted article', () => {
-			return request(app)
-				.post('/api/articles')
-				.send({
-					title: 'Star Wars',
-					body: 'A long time ago in a galaxy far far away',
-					topic: 'paper',
-					username: 'icellusedkars',
-				})
-				.expect(201)
-				.then((res) => {
-					const { article } = res.body;
+			test('GET 200: orders the articles correctly when passed both a sort_by and "asc" order query', () => {
+				return request(app)
+					.get('/api/articles?sort_by=article_id&order=asc')
+					.expect(200)
+					.then(({ body: { articles } }) => {
+						expect(articles).toBeSortedBy('article_id', { descending: false });
+					});
+			});
 
-					expect(article).toEqual(expect.any(Object));
-					expect(Object.keys(article)).toEqual(
-						expect.arrayContaining([
-							'article_id',
-							'title',
-							'body',
-							'votes',
-							'topic',
-							'author',
-							'created_at',
-						])
-					);
-				});
+			test('GET 200: will filter by an existing author', () => {
+				return request(app)
+					.get('/api/articles?author=butter_bridge')
+					.expect(200)
+					.then(({ body: { articles } }) => {
+						expect(articles.length).toBe(3);
+						expect(
+							articles.every(function (article) {
+								return article.author == 'butter_bridge';
+							})
+						).toBe(true);
+					});
+			});
+			test('GET 200: will filter by an existing topic', () => {
+				return request(app)
+					.get('/api/articles?topic=mitch')
+					.expect(200)
+					.then(({ body: { articles } }) => {
+						expect(articles.length).toBe(10);
+						expect(
+							articles.every(function (article) {
+								return article.topic === 'mitch';
+							})
+						).toBe(true);
+					});
+			});
+
+			test('GET 200: will filter by author and topic when articles matching both exist', () => {
+				return request(app)
+					.get('/api/articles?author=butter_bridge&topic=mitch')
+					.expect(200)
+					.then(({ body: { articles } }) => {
+						expect(
+							articles.every(function (article) {
+								return (
+									article.author === 'butter_bridge' &&
+									article.topic === 'mitch'
+								);
+							})
+						).toBe(true);
+					});
+			});
+			test('GET 200: can set a limit query', () => {
+				return request(app)
+					.get('/api/articles?limit=5')
+					.expect(200)
+					.then(({ body: { articles } }) => {
+						expect(articles.length).toBe(5);
+					});
+			});
+			test('GET 200: defaults to a limit of 10', () => {
+				return request(app)
+					.get('/api/articles')
+					.expect(200)
+					.then(({ body: { articles } }) => {
+						expect(articles.length).toBe(10);
+					});
+			});
+			test('GET 200: can use a page query with default limit 10 to return the second page of results', () => {
+				return request(app)
+					.get('/api/articles?sort_by=article_id&p=2')
+					.expect(200)
+					.then(({ body: { articles } }) => {
+						expect(articles[0].article_id === 2 && articles[1] === 1);
+						expect(articles.length).toBe(2);
+					});
+			});
+			test('POST 201: responds with the newly posted article', () => {
+				return request(app)
+					.post('/api/articles')
+					.send({
+						title: 'Star Wars',
+						body: 'A long time ago in a galaxy far far away',
+						topic: 'paper',
+						username: 'icellusedkars',
+					})
+					.expect(201)
+					.then((res) => {
+						const { article } = res.body;
+
+						expect(article).toEqual(expect.any(Object));
+						expect(Object.keys(article)).toEqual(
+							expect.arrayContaining([
+								'article_id',
+								'title',
+								'body',
+								'votes',
+								'topic',
+								'author',
+								'created_at',
+							])
+						);
+					});
+			});
 		});
 
 		describe('PATH: /:article_id', () => {
@@ -446,65 +452,67 @@ describe('PATH: /api', () => {
 		});
 		//articles closing
 	});
-	describe('PATH: api/comments', () => {
-		describe('PATH: /comments/:commentid', () => {
-			test('PATCH 202: increases the vote count by the passed amount, and returns the updated comment', () => {
-				const increaseBy = { inc_votes: 5 };
-				return request(app)
-					.patch('/api/comments/1')
-					.send(increaseBy)
-					.expect(202)
-					.then(
-						({
-							body: {
-								comment: { votes },
-							},
-						}) => {
-							expect(votes).toBe(21);
-						}
-					);
-			});
-			test('PATCH 202: decreases the vote count by the passed amount, and returns the updated comment', () => {
-				const decreaseBy = { inc_votes: -5 };
-				return request(app)
-					.patch('/api/comments/1')
-					.send(decreaseBy)
-					.expect(202)
-					.then(
-						({
-							body: {
-								comment: { votes },
-							},
-						}) => {
-							expect(votes).toBe(11);
-						}
-					);
-			});
+	describe('Comments', () => {
+		describe('PATH: api/comments', () => {
+			describe('PATH: /comments/:commentid', () => {
+				test('PATCH 202: increases the vote count by the passed amount, and returns the updated comment', () => {
+					const increaseBy = { inc_votes: 5 };
+					return request(app)
+						.patch('/api/comments/1')
+						.send(increaseBy)
+						.expect(202)
+						.then(
+							({
+								body: {
+									comment: { votes },
+								},
+							}) => {
+								expect(votes).toBe(21);
+							}
+						);
+				});
+				test('PATCH 202: decreases the vote count by the passed amount, and returns the updated comment', () => {
+					const decreaseBy = { inc_votes: -5 };
+					return request(app)
+						.patch('/api/comments/1')
+						.send(decreaseBy)
+						.expect(202)
+						.then(
+							({
+								body: {
+									comment: { votes },
+								},
+							}) => {
+								expect(votes).toBe(11);
+							}
+						);
+				});
 
-			test('DELETE 204: deletes the comment, only returning 204 status', () => {
-				return request(app)
-					.delete('/api/comments/1')
-					.expect(204)
-					.then(({ body }) => {
-						expect(Object.entries(body).length).toBe(0);
-					});
+				test('DELETE 204: deletes the comment, only returning 204 status', () => {
+					return request(app)
+						.delete('/api/comments/1')
+						.expect(204)
+						.then(({ body }) => {
+							expect(Object.entries(body).length).toBe(0);
+						});
+				});
+				test('DELETE 204: deletes the comment specified in the path', () => {
+					return request(app)
+						.delete('/api/comments/1')
+						.expect(204)
+						.then(() => {
+							return connection
+								.from('comments')
+								.where('comment_id', '=', '1')
+								.first();
+						})
+						.then((comment) => {
+							expect(comment).toBeUndefined();
+						});
+				});
 			});
-			test('DELETE 204: deletes the comment specified in the path', () => {
-				return request(app)
-					.delete('/api/comments/1')
-					.expect(204)
-					.then(() => {
-						return connection
-							.from('comments')
-							.where('comment_id', '=', '1')
-							.first();
-					})
-					.then((comment) => {
-						expect(comment).toBeUndefined();
-					});
-			});
+			//comments closing
 		});
-		//comments closing
 	});
 	// api closing
 });
