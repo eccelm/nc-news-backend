@@ -1,5 +1,5 @@
 const handlePsqlErrors = (err, req, res, next) => {
-   const badReqCodes = ['23502', '22001', '23505']
+   const badReqCodes = ['22P02','23502', '22001', '23505', '22P02',]
    console.log(err.code, err.message)
    if(badReqCodes.includes(err.code)) {
      res.status(400).send({ msg: `Bad Request`})

@@ -32,18 +32,34 @@ const postCommentToArticle = (req, res, next) => {
 const patchComment = (req, res, next) => {
 	const { inc_votes } = req.body;
 	const { comment_id } = req.params;
-
-	updateComment(inc_votes, comment_id)
-		.then((updatedComment) => {
-			res.status(202).send({ comment: updatedComment[0] });
-		})
-		.catch(next);
+	if (!inc_votes) {
+		res.status(400).send({ msg: 'Bad Request, no vote has been received' });
+	} else {
+		updateComment(inc_votes, comment_id)
+			.then((updatedComment) => {
+				if (!updatedComment[0]) {
+					return Promise.reject({
+						status: 404,
+						msg: `No comment exists with an ID of: ${comment_id}`,
+					});
+				}
+				res.status(202).send({ comment: updatedComment[0] });
+			})
+			.catch(next);
+	}
 };
 
 const deleteComment = (req, res, next) => {
 	const { comment_id } = req.params;
+
 	removeComment(comment_id)
-		.then(() => {
+		.then((comment) => {
+			if (!comment[0]) {
+				return Promise.reject({
+					status: 404,
+					msg: `No comment exists with an ID of: ${comment_id}`,
+				});
+			}
 			res.sendStatus(204);
 		})
 		.catch(next);

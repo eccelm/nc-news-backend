@@ -22,7 +22,7 @@ const updateComment = (inc_votes, comment_id) => {
 };
 
 const removeComment = (comment_id) => {
-	return connection.del().from('comments').where({ comment_id });
+	return connection.del().from('comments').where({ comment_id }).returning('*');
 };
 
 module.exports = {

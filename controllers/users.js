@@ -14,7 +14,7 @@ const getAllUsers = (req, res, next) => {
 
 const getUserByUsername = (req, res, next) => {
 	const { username } = req.params;
-	console.log(req.params)
+
 	fetchUserByUsername(username)
 		.then((user) => {
 	
