@@ -99,7 +99,7 @@ describe('PATH: /api', () => {
 						expect(body.msg).toBe('Bad Request');
 					});
 			});
-			test('Post 400 returns an error message when the username already exists in the database', () => {
+			test('POST 400: returns an error message when the username already exists in the database', () => {
 				return request(app)
 					.post('/api/users')
 					.send({
@@ -115,6 +115,18 @@ describe('PATH: /api', () => {
 			// BELOW 400 ON PATHS
 		});
 		describe('PATH /:username', () => {
+			test('405 status when an invalid method is attempted', () => {
+				const invalidMethods = ['post', 'patch', 'delete'];
+				const methodPromises = invalidMethods.map((method) => {
+					return request(app)
+						[method]('/api/users/lurker')
+						.expect(405)
+						.then(({ body: { msg } }) => {
+							expect(msg).toBe('method not allowed');
+						});
+				});
+				return Promise.all(methodPromises);
+			});
 			test('GET 404:returns a custom error message for a well-formed endpoint that does not exist', () => {
 				return request(app)
 					.get('/api/users/nonexistentuser')
@@ -130,6 +142,21 @@ describe('PATH: /api', () => {
 	});
 	describe('Articles', () => {
 		describe('api/articles', () => {
+			test('405 status when an invalid method is attempted', () => {
+				const invalidMethods = ['patch', 'delete'];
+				const methodPromises = invalidMethods.map((method) => {
+					return request(app)
+						[method]('/api/articles')
+						.expect(405)
+						.then(({ body: { msg } }) => {
+							expect(msg).toBe('method not allowed');
+						});
+				});
+				return Promise.all(methodPromises);
+			});
+
+
+
 			test('GET status 400 for a non-existent column', () => {
 				return request(app)
 					.get('/api/articles?sort_by=not_a_column')
@@ -302,7 +329,7 @@ describe('PATH: /api', () => {
 		});
 		describe('api/articles/:article_id/comments', () => {
 			// get comment
-			test('GET status 400 for a non-existent column', () => {
+			test('GET 400: "Bad Request" for a non-existent column', () => {
 				return request(app)
 					.get('/api/articles/1/comments?sort_by=not_a_column')
 					.expect(400)
@@ -339,6 +366,21 @@ describe('PATH: /api', () => {
 	describe('Comments', () => {
 		describe('PATH: api/comments', () => {
 			describe('PATH: /comments/:commentid', () => {
+				test('405 status when an invalid method is attempted', () => {
+					const invalidMethods = ['get', 'post'];
+					const methodPromises = invalidMethods.map((method) => {
+						return request(app)
+							[method]('/api/comments/1')
+							.expect(405)
+							.then(({ body: { msg } }) => {
+								expect(msg).toBe('method not allowed');
+							});
+					});
+					return Promise.all(methodPromises);
+				});
+	
+			
+			
 				test('PATCH 404:return custom error message for a well-formed endpoint that does not exist', () => {
 					const increaseBy = { inc_votes: 5 };
 					return request(app)

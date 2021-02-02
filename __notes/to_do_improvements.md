@@ -14,6 +14,9 @@
 Improve the Date Formatter to a more readable form with .toUTCString or .toLocaleString (also Date and Time similarly)
 
 - Error Handling
+
+- Should 405 go on all parametric endpoints too like /:articleid
+
 - Posting wrong data type e.g. can send a new comment with body as an array, and it gets converted to a string --> how to stop this? 
 
 ```js

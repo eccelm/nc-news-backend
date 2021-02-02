@@ -14,6 +14,7 @@ usersRouter
 
 usersRouter
   .route('/:username')
-  .get(getUserByUsername);
+  .get(getUserByUsername)
+  .all(send405);
 
 module.exports = usersRouter;
