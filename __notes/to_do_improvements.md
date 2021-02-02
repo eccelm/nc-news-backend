@@ -2,7 +2,7 @@
 
 ### Potential Refactors:
 
-- Total count --> either put in as another function, or find a way in knex to allow a second count query that's not tied to the groupBy
+- Total count --> either put in as another function, or find a way in knex to allow a second count query that's not tied to the groupBy and can ignore the limit and offset
 
 - Auth0 and passport full login authentication
   https://auth0.com/blog/create-a-simple-and-secure-node-express-app/
@@ -12,6 +12,31 @@
 
 - Ignore below leave formatting to front end / find Knex workaround for toLocaleString()
 Improve the Date Formatter to a more readable form with .toUTCString or .toLocaleString (also Date and Time similarly)
+
+- Error Handling
+- Posting wrong data type e.g. can send a new comment with body as an array, and it gets converted to a string --> how to stop this? 
+
+```js
+  console.log
+    {
+      comment_id: 19,
+      author: 'lurker',
+      article_id: 5,
+      votes: 0,
+      body: '{"true","false","1000"}',
+      created_at: 2021-02-02T15:28:48.343Z
+    } <<<<< should have array
+
+      at controllers/comments.js:27:12
+          at runMicrotasks (<anonymous>)
+```
+   - improve error handling concerning order, page, and getArticles author and topic - currently no distinction between searching by non-existent and accurate but with no results.
+
+   - If an incorrect order is given, it defaults to the generic desc order anyway --> but user could presume their query has worked --> just send a message and keep - or send down a 400 Bad Request route?
+
+  - is there a need to remerge errors.test file with app.test e.g. in crossover cases POST 200 even if extra keys are present --> does this fall under error handling but with a successful req code ?
+  
+  ##  Questions:
 
 - Array destructuring?
 
@@ -33,6 +58,7 @@ Delete profile --> what consequences for data left behind, articles, comments et
   - Would it be useful to send the err.code instead
   - Or hard code in each option? 
 
+405 will not work on /comments route - why ?
 ### Topics
 
 Error handling --> using datatypes other than string e.g. slug: {test: true} isn't causing an issue??

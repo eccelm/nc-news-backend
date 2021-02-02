@@ -365,7 +365,7 @@ describe('PATH: /api', () => {
 						expect(comments.length).toBeGreaterThan(0);
 					});
 			});
-			test('GET 200: responds with an empty array when an article has comments', () => {
+			test('GET 200: responds with an empty array when an article has no comments', () => {
 				return request(app)
 					.get('/api/articles/2/comments')
 					.expect(200)

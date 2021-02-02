@@ -57,7 +57,7 @@ const updateArticle = (inc_votes, article_id) => {
 };
 
 const removeArticle = (article_id) => {
-	return connection('articles').del().where({ article_id });
+	return connection('articles').del().where({ article_id }).returning('*');
 };
 
 const addNewArticle = (newArticle) => {

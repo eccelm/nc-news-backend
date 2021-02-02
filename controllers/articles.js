@@ -10,7 +10,13 @@ const deleteArticle = (req, res, next) => {
 	let { article_id } = req.params;
 
 	removeArticle(article_id)
-		.then(() => {
+		.then((article) => {
+				if (!article[0]) {
+					return Promise.reject({
+						status: 404,
+						msg: `No article was found with an ID of: ${article_id}`,
+					});
+				}
 			res.sendStatus(204);
 		})
 		.catch(next);
@@ -21,10 +27,20 @@ const getAllArticles = (req, res, next) => {
 
 	fetchAllArticles(sort_by, order, author, topic, limit, p)
 		.then((articles) => {
+	
+			if (articles.length === 0) {
+				if(author || topic) {
+				return Promise.reject({
+					status: 404,
+					msg: `No articles exist that match your filters`,
+				});
+			}
+			}
 			res.status(200).send({ articles });
 		})
 		.catch(next);
-};
+	
+	}
 
 const postNewArticle = (req, res, next) => {
 	const { title, body, topic, username: author } = req.body;
@@ -41,6 +57,12 @@ const getArticleById = (req, res, next) => {
 
 	fetchArticleById(article_id)
 		.then((article) => {
+			if (!article) {
+				return Promise.reject({
+					status: 404,
+					msg: `No article was found with an ID of: ${article_id}`,
+				});
+			}
 			res.status(200).send({ article });
 		})
 		.catch(next);
@@ -49,12 +71,21 @@ const getArticleById = (req, res, next) => {
 const patchArticle = (req, res, next) => {
 	const { article_id } = req.params;
 	const {inc_votes} = req.body;
+	if (!inc_votes) {
+		res.status(400).send({ msg: 'Bad Request, no vote has been received' });
+	} else {
 	updateArticle(inc_votes, article_id)
 		.then((article) => {
+			if (!article[0]) {
+				return Promise.reject({
+					status: 404,
+					msg: `No article was found with an ID of: ${article_id}`,
+				});
+			}
 			res.status(202).send({ article: article[0] });
 		})
 		.catch(next);
-};
+}};
 
 module.exports = {
 	deleteArticle,

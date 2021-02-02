@@ -12,6 +12,7 @@ const getArticleComments = (req, res, next) => {
 
 	fetchArticleComments(article_id, sort_by, order)
 		.then((comments) => {
+	
 			res.status(200).send({ comments });
 		})
 		.catch(next);
@@ -20,10 +21,12 @@ const getArticleComments = (req, res, next) => {
 const postCommentToArticle = (req, res, next) => {
 	const { article_id } = req.params;
 	const { body, username } = req.body;
+	
 	const newComment = { author: username, article_id, body };
 
 	addCommentToArticle(newComment)
 		.then((newComment) => {
+
 			res.status(201).send({ comment: newComment[0] });
 		})
 		.catch(next);
