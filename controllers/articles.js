@@ -48,7 +48,8 @@ const getArticleById = (req, res, next) => {
 
 const patchArticle = (req, res, next) => {
 	const { article_id } = req.params;
-	updateArticle(req.body, article_id)
+	const {inc_votes} = req.body;
+	updateArticle(inc_votes, article_id)
 		.then((article) => {
 			res.status(202).send({ article: article[0] });
 		})

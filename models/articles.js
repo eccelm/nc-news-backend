@@ -47,8 +47,8 @@ const fetchArticleById = (article_id) => {
 		});
 };
 
-const updateArticle = (reqBody, article_id) => {
-	const { inc_votes } = reqBody;
+const updateArticle = (inc_votes, article_id) => {
+
 	return connection
 		.increment('votes', inc_votes)
 		.into('articles')
