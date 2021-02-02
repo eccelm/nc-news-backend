@@ -4,7 +4,7 @@
 
   This is the main sprint from the Back-End block of the Northcoders bootcamp. The objective was to setup a REST API which provides the interaction with a database of a reddit-style news website. 
  
- It  used by the React-based Front-End nc-news project! >>> [See the front end code](https://github.com/eccelm/NC-News-React-FrontEnd)
+ It  used by the main Front-End project sprint, which uses React >>> [See the front end code](https://github.com/eccelm/NC-News-React-FrontEnd)
 
 - You can view the hosted version [by clicking here](https://marthas-news-api.herokuapp.com/api)
 ***
