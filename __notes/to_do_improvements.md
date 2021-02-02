@@ -1,8 +1,9 @@
-## Possible further Routes:
+> ### Hello
+>Just to say, this file is a notes-to-self written as I went along for when I revisit the project, and as such may involve the odd typo / incoherent sentence 
 
 ### Potential Refactors:
 
-- Total count --> either put in as another function, or find a way in knex to allow a second count query that's not tied to the groupBy and can ignore the limit and offset
+- Total count of Articles (GET) --> either put in as another function, or find a way in knex to allow a second count query that's not tied to the groupBy and can ignore the limit and offset
 
 - Auth0 and passport full login authentication
   https://auth0.com/blog/create-a-simple-and-secure-node-express-app/
@@ -13,9 +14,7 @@
 - Ignore below leave formatting to front end / find Knex workaround for toLocaleString()
 Improve the Date Formatter to a more readable form with .toUTCString or .toLocaleString (also Date and Time similarly)
 
-- Error Handling
-
-- Should 405 go on all parametric endpoints too like /:articleid
+### Error Handling
 
 - Posting wrong data type e.g. can send a new comment with body as an array, and it gets converted to a string --> how to stop this? 
 
@@ -37,11 +36,12 @@ Improve the Date Formatter to a more readable form with .toUTCString or .toLocal
 
    - If an incorrect order is given, it defaults to the generic desc order anyway --> but user could presume their query has worked --> just send a message and keep - or send down a 400 Bad Request route?
 
-  - is there a need to remerge errors.test file with app.test e.g. in crossover cases POST 200 even if extra keys are present --> does this fall under error handling but with a successful req code ?
+  - is there a need to remerge errors.test file with app.test e.g. in crossover cases POST 200 even if extra keys are present --> does this fall under error handling but with a successful 201 req code ?
   
   ##  Questions:
+- Should 405 go on all parametric endpoints too like /:articleid ?
 
-- Array destructuring?
+- Array destructuring? e.g. instead of  articles[0]
 
 - Post 201 for new article doesn't have a comment_count ? When is that created?
 
