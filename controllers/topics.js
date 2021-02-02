@@ -19,10 +19,3 @@ const postNewTopic = (req, res, next) => {
 };
 module.exports = { getAllTopics, postNewTopic };
 
-/*
-Naming functions CRUD (Create, Read, Update, Delete)
-Controllers
-  (C) post (R) get (U) patch (D) delete
-Models
-  (C) add (R) fetch (U) update (D) remove
-*/

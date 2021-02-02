@@ -95,10 +95,3 @@ module.exports = {
 	postNewArticle,
 };
 
-/*
-Naming functions CRUD (Create, Read, Update, Delete)
-Controllers
-  (C) post (R) get (U) patch (D) delete
-Models
-  (C) add (R) fetch (U) update (D) remove
-*/

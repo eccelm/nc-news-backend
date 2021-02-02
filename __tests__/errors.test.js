@@ -2,13 +2,6 @@ process.env.NODE_ENV = 'test';
 const app = require('../app');
 const request = require('supertest');
 const connection = require('../db/connection');
-/*
-invalid column
-query provides the wrong data type
-not enough information is provided
-too much information is provided
-data is formatted correctly, but is still un-processable? (eg. an id that doesn't exist)
-*/
 
 describe('PATH: /api', () => {
 	beforeEach(() => {
@@ -155,8 +148,6 @@ describe('PATH: /api', () => {
 				return Promise.all(methodPromises);
 			});
 
-
-
 			test('GET status 400 for a non-existent column', () => {
 				return request(app)
 					.get('/api/articles?sort_by=not_a_column')
@@ -254,8 +245,6 @@ describe('PATH: /api', () => {
 						expect(body.msg).toBe('Bad Request');
 					});
 			});
-
-		
 		});
 		describe('api/articles/:articleid', () => {
 			// GET
@@ -338,7 +327,7 @@ describe('PATH: /api', () => {
 					});
 			});
 			// order query
-		
+
 			test('POST 400: returns a "Bad Request" error message when missing required fields', () => {
 				return request(app)
 					.post('/api/articles/5/comments')
@@ -360,7 +349,6 @@ describe('PATH: /api', () => {
 						expect(body.msg).toBe('Bad Request');
 					});
 			});
-
 		});
 	});
 	describe('Comments', () => {
@@ -378,9 +366,7 @@ describe('PATH: /api', () => {
 					});
 					return Promise.all(methodPromises);
 				});
-	
-			
-			
+
 				test('PATCH 404:return custom error message for a well-formed endpoint that does not exist', () => {
 					const increaseBy = { inc_votes: 5 };
 					return request(app)
